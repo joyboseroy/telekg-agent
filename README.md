@@ -1,5 +1,3 @@
-`paper/telekg_paper.js` wasn't touched in this session — only the two `telekg/` code files and the README changed. The paper docx generator still reflects the architecture as of the earlier session (Ollama references possibly stale in there, KPI translator section may not mention the prompt refinements). Since you said no arXiv and GitHub-only, I'd leave it as-is rather than spend more time on it — it's a "might want it later" artifact, not part of what ships today.
-
 # TeleKG-Agent
 
 A research prototype exploring three ideas for AI in telecom networks. Built solo, no GPU, runs on synthetic data.

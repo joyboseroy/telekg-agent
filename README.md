@@ -62,7 +62,7 @@ Change Event (SW_UPGRADE / CONFIG_CHANGE / CELL_OUTAGE / SLICE_CREATE)
 A separate, standalone piece (not wired into the graph) is **TeleSignal-Tiny**
 (`telekg/telesignal_model.py`), a small transformer pretrained directly on
 multivariate KPI time-series via masked-patch reconstruction, evaluated on
-downstream anomaly detection. See [Signal-Native Foundation Models](#signal-native-foundation-models-telesignal-tiny) below.
+downstream anomaly detection. See [Signal-Native Foundation Models](#part-3-signal-native-foundation-models-telesignal-tiny) below.
 
 **Design principle throughout:** the graph holds all structural/causal
 knowledge; the LLM is only ever asked to do two things — turn a structured
@@ -70,6 +70,31 @@ graph result into a sentence, or turn a structured spec into code. It is
 never asked to recall a telecom fact from training data. This is what makes
 the system's output traceable: every generated test or translated KPI can be
 walked back through the exact graph path that produced it.
+
+---
+
+## 30-Second Demo (start here)
+
+Before any setup, there's a single zero-dependency file you can run right
+now to see the core causal reasoning in action:
+
+```bash
+python demo_telecom_graph.py --list
+python demo_telecom_graph.py --kpi throughput
+```
+
+This is a small, hand-written, in-memory version of the same KPI causality
+graph used by `telekg/reasoner.py`'s root-cause traversal, stripped of
+FalkorDB, LangGraph, and Groq so it runs anywhere with nothing but the
+Python standard library. It exists for live demos, interviews, and coding
+rounds where spinning up infrastructure first isn't an option. Type a KPI
+name and it walks the full causal chain backward to root causes, complete
+with weighted evidence and a recommended remedy, the same reasoning
+`telekg/reasoner.py`'s `root_cause()` does against the real FalkorDB graph,
+just without needing the real graph to see it work.
+
+For the real system (full FalkorDB graph, 5-agent LangGraph pipeline, Groq
+narration, PM counter substrate), continue to the Quick Start below.
 
 ---
 
@@ -137,6 +162,7 @@ telekg/
 agents/
   pipeline.py             — 5-agent LangGraph pipeline + Groq LLM wrapper
 main.py                   — Demo runner: builds graph, runs pipeline, prints report
+demo_telecom_graph.py      — Zero-dependency standalone causal-graph demo (see above)
 run_kpi_eval.py            — Run the KPI translation benchmark against real Groq
 run_telesignal_poc.py      — Run the signal-native pretraining proof of concept
 data/                      — Generated synthetic data (gitignored by default)
@@ -342,9 +368,10 @@ torch                    — only needed for telesignal_model.py / run_telesigna
 ```
 
 The whole repository is designed so that `python main.py --dry-run --eval`
-and `python -m telekg.kpi_eval` work with just `numpy` installed — every
-other dependency is there to upgrade quality (a real graph, a real LLM,
-semantic retrieval, real pretraining), not to make the thing run at all.
+and `python -m telekg.kpi_eval` work with just `numpy` installed, and
+`demo_telecom_graph.py` works with nothing installed at all — every other
+dependency is there to upgrade quality (a real graph, a real LLM, semantic
+retrieval, real pretraining), not to make the thing run at all.
 
 ---
 

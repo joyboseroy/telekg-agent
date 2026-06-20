@@ -1,0 +1,18 @@
+# Core — always required
+numpy
+
+# Graph database (optional — dry-run mode works without it)
+falkordb
+
+# LLM backend (optional — offline stub used if missing or no GROQ_API_KEY)
+groq
+
+# Agent orchestration (optional — sequential fallback runner works without it)
+langgraph
+
+# Semantic retrieval for the KPI translator (optional — falls back to
+# keyword-overlap retrieval if not installed)
+sentence-transformers
+
+# Signal-native foundation model proof of concept (telesignal_model.py)
+torch
